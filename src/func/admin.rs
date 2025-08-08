@@ -8,12 +8,18 @@ pub trait AdministrationMethods {
 
 impl AdministrationMethods for VcmpFunctions {
     fn ban_ip(&self, ip: &str) {
-        (self.inner.BanIP)(ip.as_ptr() as *mut i8);
+        let addr = format!("{ip}\0");
+        let ptr = addr.as_ptr() as *mut i8;
+        (self.inner.BanIP)(ptr as *mut i8);
     }
     fn unban_ip(&self, ip: &str) -> bool {
-        (self.inner.UnbanIP)(ip.as_ptr() as *mut i8) != 0
+        let addr = format!("{ip}\0");
+        let ptr = addr.as_ptr() as *mut i8;
+        (self.inner.UnbanIP)(ptr as *mut i8) != 0
     }
     fn is_ip_banned(&self, ip: &str) -> bool {
-        (self.inner.IsIPBanned)(ip.as_ptr() as *mut i8) != 0
+        let addr = format!("{ip}\0");
+        let ptr = addr.as_ptr() as *mut i8;
+        (self.inner.IsIPBanned)(ptr as *mut i8) != 0
     }
 }
