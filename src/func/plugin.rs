@@ -45,7 +45,8 @@ impl PluginMethods for VcmpFunctions {
     }
 
     fn send_plugin_command(&self, command_identifier: u32, command: &str) -> VcmpResult<()> {
-        let cmd_ptr = command.as_ptr() as *const i8;
+        let cmd = format!("{command}\0");
+        let cmd_ptr = cmd.as_ptr() as *const i8;
         let code = (self.inner.SendPluginCommand)(command_identifier, cmd_ptr);
         if code != 0 {
             Err(VcmpError::from(code))
