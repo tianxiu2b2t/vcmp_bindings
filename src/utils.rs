@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::{MarkerId, types::WorldId};
+use crate::{raw, types::WorldId, MarkerId, VcmpResult};
 
 /*
     Color 类
@@ -290,4 +290,20 @@ impl Marker {
             sprite,
         }
     }
+}
+
+pub fn set_plugin_name(
+    name: &str,
+    plugin_info: &mut raw::PluginInfo
+) -> VcmpResult<()> {
+    // check name length is not greater than 32
+    if name.len() >= 32 {
+        return Err(crate::VcmpError::TooLargeInput)
+    }
+    let mut val = [0i8; 32];
+    for (i, c) in name.chars().enumerate() {
+        val[i] = c as i8;
+    }
+    plugin_info.name = val;
+    Ok(())
 }
